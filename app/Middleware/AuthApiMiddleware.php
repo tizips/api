@@ -36,7 +36,6 @@ class AuthApiMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-
         $payload = $this->verifyToken();
 
         if ($payload['iss'] !== 'iss') {
@@ -54,13 +53,13 @@ class AuthApiMiddleware implements MiddlewareInterface
 
         $token = $authorization = '';
 
-        if ($request->cookie('Authorization')) {
+        if ($request->hasCookie('Authorization')) {
             $authorization = $request->cookie('Authorization');
             $token = substr($authorization, 7);
-        } elseif ($request->getHeader('Authorization')) {
-            $authorization = $request->header('Authorization');
+        } elseif ($request->hasHeader('Authorization')) {
+            $authorization = $request->getHeaderLine('Authorization');
             $token = substr($authorization, 7);
-        } elseif ($request->input('Authorization')) {
+        } elseif ($request->has('Authorization')) {
             $token = $request->input('Authorization');
         }
 
