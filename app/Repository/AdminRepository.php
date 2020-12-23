@@ -1,16 +1,17 @@
 <?php
+
 declare(strict_types=1);
 
-namespace App\Service;
+namespace App\Repository;
 
 use App\Common\Api\Status;
 use App\Exception\ApiException;
 use App\Model\Admin;
-use Hyperf\Di\Annotation\Inject;
 use Hyperf\Redis\Redis;
 use Hyperf\Utils\ApplicationContext;
+use Hyperf\Di\Annotation\Inject;
 
-class AdminService extends AbstractService
+class AdminRepository
 {
     /**
      * @Inject
@@ -18,7 +19,7 @@ class AdminService extends AbstractService
      */
     protected $admin;
 
-    public function getAdminByUsername(string $username, int $ttl = 0, array $params = ['*'])
+    public function getAdminByUsername(string $username, int $ttl = 0, array $params = ['*']): array
     {
         $redis = $key = null;
 
@@ -52,7 +53,7 @@ class AdminService extends AbstractService
             $ok = $redis->hMSet($key, $admin);
 
             if (!$ok) {
-                throw ApiException::break(Status::ERR_SYS);
+                ApiException::break(Status::ERR_SYS);
             }
         }
 

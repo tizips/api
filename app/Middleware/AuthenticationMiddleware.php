@@ -16,7 +16,7 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
-class AuthApiMiddleware implements MiddlewareInterface
+class AuthenticationMiddleware implements MiddlewareInterface
 {
     /**
      * @Inject
@@ -39,7 +39,7 @@ class AuthApiMiddleware implements MiddlewareInterface
         $payload = $this->verifyToken();
 
         if ($payload['iss'] !== 'iss') {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         }
 
         Context::set('uid', $payload['sub']);

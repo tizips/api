@@ -13,26 +13,22 @@ declare(strict_types=1);
 
 use Hyperf\HttpServer\Router\Router;
 
-Router::get('/init', function () {
-    return [
-        'username' => 'admin',
-        'password' => '123456',
-        'password_encryption' => password_hash('123456', PASSWORD_BCRYPT),
-    ];
+Router::addGroup('/', function () {
+    Router::get('', [App\Controller\Basic\IndexController::class, 'index']);
+    Router::get('init', [App\Controller\Basic\IndexController::class, 'init']);
 });
 
-Router::get('/', [App\Controller\IndexController::class, 'index']);
-
-Router::post('/auth', [App\Controller\Auth\AuthController::class, 'doJwtToken']);
+Router::addGroup('/authentication', function () {
+    Router::post('/account', [App\Controller\Authentication\AuthenticationController::class, 'doAccount']);
+});
 
 Router::addGroup('', function () {
-
-    Router::addGroup('/admin', function () {
-        Router::get('', [App\Controller\Admin\AdminController::class, 'doAdminInformation']);
+    Router::addGroup('/account', function () {
+        Router::get('', [App\Controller\Account\AccountController::class, 'doInformation']);
     });
 }, [
     'middleware' => [
-        App\Middleware\AuthApiMiddleware::class,
+        App\Middleware\AuthenticationMiddleware::class,
     ],
 ]);
 

@@ -34,7 +34,7 @@ class Jwt
         $this->key = config('jwt_token');
 
         if (empty($this->key)) {
-            throw ApiException::break(Status::ERR_JWT_NOT_EXIST);
+            ApiException::break(Status::ERR_JWT_NOT_EXIST);
         }
     }
 
@@ -45,7 +45,7 @@ class Jwt
      * @param string $sub 持有人
      * @return string   Jwt 令牌
      */
-    public function issueToken(string $iss, int $nbf, int $exp, $sub)
+    public function issueToken(string $iss, int $nbf, int $exp, $sub): string
     {
         $now = Carbon::now();
 
@@ -68,20 +68,24 @@ class Jwt
      *  'iat'=>time(),  //签发时间
      *  'exp'=>time()+7200,  //过期时间
      *  'nbf'=>time()+60,  //该时间之前不接收处理该Token
-     *  'sub'=>'www.admin.com',  //面向的用户
-     *  'jti'=>md5(uniqid('JWT').time())  //该Token唯一标识
+     *  'sub'=>'user',  //面向的用户
+     *  'jti'=>md5(randString.time())  //该Token唯一标识
      * ]
      * @return string
      */
-    private function getToken(array $payload)
+    private function getToken(array $payload): string
     {
         if (!is_array($payload)) {
-            throw ApiException::break(Status::ERR_JWT_PAYLOAD);
+            ApiException::break(Status::ERR_JWT_PAYLOAD);
         }
 
         $base64header = $this->base64UrlEncode(json_encode(self::HEADER, JSON_UNESCAPED_UNICODE));
         $base64payload = $this->base64UrlEncode(json_encode($payload, JSON_UNESCAPED_UNICODE));
-        return $base64header . '.' . $base64payload . '.' . $this->signature($base64header . '.' . $base64payload, $this->key, self::HEADER['alg']);
+        return $base64header . '.' . $base64payload . '.' . $this->signature(
+                $base64header . '.' . $base64payload,
+                $this->key,
+                self::HEADER['alg']
+            );
     }
 
     /**
@@ -92,15 +96,15 @@ class Jwt
      *  'iat'=>time(),  //签发时间
      *  'exp'=>time()+7200,  //过期时间
      *  'nbf'=>time()+60,  //该时间之前不接收处理该Token
-     *  'sub'=>'www.admin.com',  //面向的用户
-     *  'jti'=>md5(uniqid('JWT').time())  //该Token唯一标识
+     *  'sub'=>'user',  //面向的用户
+     *  'jti'=>md5(randString.time())  //该Token唯一标识
      * ]
      */
-    public function verifyToken(string $token)
+    public function verifyToken(string $token): array
     {
         $tokens = explode('.', $token);
         if (count($tokens) != 3) {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         };
 
         list($base64header, $base64payload, $sign) = $tokens;
@@ -108,29 +112,29 @@ class Jwt
         //获取jwt算法
         $base64DecodeHeader = json_decode($this->base64UrlDecode($base64header), true);
         if (empty($base64DecodeHeader['alg'])) {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         };
 
         //签名验证
         if ($this->signature($base64header . '.' . $base64payload, $this->key, $base64DecodeHeader['alg']) !== $sign) {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         };
 
         $payload = json_decode($this->base64UrlDecode($base64payload), true);
 
         //签发时间大于当前服务器时间验证失败
         if (isset($payload['iat']) && $payload['iat'] > time()) {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         };
 
         //过期时间小宇当前服务器时间验证失败
         if (isset($payload['exp']) && $payload['exp'] < time()) {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         };
 
         //该nbf时间之前不接收处理该Token
         if (isset($payload['nbf']) && $payload['nbf'] > time()) {
-            throw ApiException::break(Status::ERR_AUTH);
+            ApiException::break(Status::ERR_AUTH);
         };
 
         return $payload;
@@ -141,7 +145,7 @@ class Jwt
      * @param string $input 需要转码的字符串
      * @return mixed|string
      */
-    private function base64UrlEncode(string $input)
+    private function base64UrlEncode(string $input): string
     {
         return str_replace('=', '', strtr(base64_encode($input), '+/', '-_'));
     }
@@ -151,7 +155,7 @@ class Jwt
      * @param string $input 需要解码的字符串
      * @return string
      */
-    private function base64UrlDecode(string $input)
+    private function base64UrlDecode(string $input): string
     {
         $remainder = strlen($input) % 4;
         if ($remainder) {
@@ -168,7 +172,7 @@ class Jwt
      * @param string $alg 算法方式
      * @return mixed
      */
-    private function signature(string $input, string $key, string $alg = 'HS256')
+    private function signature(string $input, string $key, string $alg = 'HS256'): string
     {
         $alg_config = [
             'HS256' => 'sha256'

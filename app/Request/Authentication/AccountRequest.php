@@ -2,12 +2,11 @@
 
 declare(strict_types=1);
 
-namespace App\Request\Auth;
+namespace App\Request\Authentication;
 
-use App\Common\Api\Status;
 use Hyperf\Validation\Request\FormRequest;
 
-class JwtTokenRequest extends FormRequest
+class AccountRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

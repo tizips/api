@@ -2,19 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Controller\Auth;
+namespace App\Service\Authentication;
 
-use App\Common\Api\Response;
 use App\Common\Api\Status;
 use App\Common\Auth\Jwt;
-use App\Controller\AbstractController;
 use App\Exception\ApiException;
-use App\Request\Auth\JwtTokenRequest;
-use App\Service\AdminService;
+use App\Repository\AdminRepository;
+use App\Service\AbstractService;
 use Carbon\Carbon;
 use Hyperf\Di\Annotation\Inject;
 
-class AuthController extends AbstractController
+class AuthenticationService extends AbstractService
 {
     /**
      * @Inject
@@ -24,31 +22,18 @@ class AuthController extends AbstractController
 
     /**
      * @Inject
-     * @var Response
+     * @var AdminRepository
      */
-    protected $response;
+    protected $adminRepository;
 
-    /**
-     * @Inject
-     * @var AdminService
-     */
-    protected $adminService;
-
-    public function doJwtToken(JwtTokenRequest $request)
+    public function account(string $username, string $password): array
     {
-        $username = (string)$request->input('username');
-        $password = (string)$request->input('password');
-
         $now = Carbon::now();
 
-        $admin = $this->adminService->getAdminByUsername($username, 60);
+        $admin = $this->adminRepository->getAdminByUsername($username, 60);
 
-        if (empty($admin)) {
-            throw ApiException::break(Status::ERR_JWT);
-        }
-
-        if (!password_verify($password, $admin['password'])) {
-            throw ApiException::break(Status::ERR_JWT);
+        if (empty($admin) || !password_verify($password, $admin['password'])) {
+            ApiException::break(Status::ERR_JWT);
         }
 
         //  设置 token 有效时间
@@ -56,7 +41,7 @@ class AuthController extends AbstractController
         $tokenExp = $now->addRealHours(2)->timestamp;
 
         //  设置缓存时长
-        $this->adminService->cacheAdminById($admin['id'], $admin, 7200);
+        $this->adminRepository->cacheAdminById($admin['id'], $admin, 7200);
 
         //  设置 refresh token 有效时间
         $refreshNbf = $now->subHours(1)->timestamp;
@@ -66,13 +51,11 @@ class AuthController extends AbstractController
         $token = $this->jwt->issueToken('iss', $tokenNbf, $tokenExp, $admin['id']);
         $refresh = $this->jwt->issueToken('ref', $refreshNbf, $refreshExp, $admin['id']);
 
-        $response = [
+        return [
             'token' => $token,
             'token_expire_time' => $tokenExp,
             'refresh' => $refresh,
             'refresh_expire_time' => $refreshExp,
         ];
-
-        return $this->response->apiSuccess($response);
     }
 }

@@ -46,14 +46,10 @@ class Response extends HyperfHttpResponse
      */
     public function apiRes(Status $status, $data = null)
     {
-        if (($data === null) || (is_array($data && empty($data)))) {
-            $data = (object)[];
-        }
-
         return [
             'code' => $status->getCode(),
             'message' => $status->getMsg(),
-            'data' => $data
+            'data' => $data === null ? (object)[] : $data,
         ];
     }
 }
