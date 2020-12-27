@@ -31,7 +31,7 @@ class Jwt
      */
     public function __construct()
     {
-        $this->key = config('jwt_token');
+        $this->key = config('jwt_secret');
 
         if (empty($this->key)) {
             ApiException::break(Status::ERR_JWT_NOT_EXIST);
