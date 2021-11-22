@@ -22,6 +22,7 @@ class CreateArticleTable extends Migration
             $table->unsignedInteger('admin_id')->default(0)->comment('作者');
             $table->string('source_name', 20)->default('')->comment('转载标题');
             $table->string('source_uri', 120)->default('')->comment('转载链接');
+            $table->string('summary', 255)->default('')->comment('简介');
             $table->text('content')->comment('内容');
             $table->unsignedTinyInteger('is_comment')->default(0)->comment('评论：0=关闭；1=开启');
             $table->unsignedTinyInteger('is_enable')->default(0)->comment('启用：0=否；1=是');

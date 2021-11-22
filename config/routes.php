@@ -6,7 +6,24 @@ use Hyperf\HttpServer\Router\Router;
 
 
 Router::addGroup('/open', function () {
-    Router::get('/categories', [App\Controller\Open\CategoryController::class, 'toTree']);
+
+    Router::addGroup('/site', function () {
+        Router::get('/config', [App\Controller\Open\SiteController::class, 'toConfig']);
+    });
+
+    Router::addGroup('/categories', function () {
+        Router::get('', [App\Controller\Open\CategoryController::class, 'toTree']);
+        Router::get('/{uri}', [App\Controller\Open\CategoryController::class, 'toInformation']);
+    });
+
+    Router::addGroup('/articles', function () {
+        Router::get('', [App\Controller\Open\ArticleController::class, 'toPaginate']);
+        Router::get('/{id}', [App\Controller\Open\ArticleController::class, 'toInformation']);
+    });
+
+    Router::addGroup('/links', function () {
+        Router::get('', [App\Controller\Open\LinkController::class, 'toList']);
+    });
 });
 
 Router::addGroup('/admin', function () {

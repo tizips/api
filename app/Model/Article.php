@@ -21,6 +21,7 @@ use Hyperf\Database\Model\SoftDeletes;
  * @property string   $source_uri
  * @property int      $is_comment
  * @property int      $is_enable
+ * @property string   $summary
  * @property string   $content
  * @property Carbon   $created_at
  * @property Carbon   $updated_at

@@ -6,6 +6,7 @@ namespace App\Controller\Open;
 
 use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
+use App\Exception\ApiException;
 use App\Model\Category;
 use Hyperf\Utils\Collection;
 use Psr\Http\Message\ResponseInterface;
@@ -37,6 +38,34 @@ class CategoryController extends AbstractController
                 }
             }
         }
+
+        return $this->response->apiSuccess($data);
+    }
+
+    public function toInformation(): ResponseInterface
+    {
+        $uri = $this->request->route('uri');
+
+        /** @var Category $category */
+        $category = Category::query()
+            ->where('uri', $uri)
+            ->where('is_enable', EnableConstants::IS_ENABLE_YES)
+            ->first();
+
+        if (! $category) ApiException::break('Not Found', 40400);
+
+        $data = [
+            'id' => $category->id,
+            'name' => $category->name,
+            'picture' => $category->picture,
+            'title' => $category->title,
+            'keyword' => $category->keyword,
+            'description' => $category->description,
+            'is_page' => $category->is_page,
+            'is_comment' => $category->is_comment,
+            'page' => $category->page,
+            'created_at' => $category->created_at->toDateTimeString(),
+        ];
 
         return $this->response->apiSuccess($data);
     }

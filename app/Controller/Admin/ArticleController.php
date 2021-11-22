@@ -13,6 +13,7 @@ use App\Model\Category;
 use App\Validator\Admin\Article\CreateValidator;
 use App\Validator\Admin\Article\UpdateValidator;
 use App\Validator\Unit\EnableValidator;
+use Hyperf\Utils\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -58,6 +59,7 @@ class ArticleController extends AbstractController
             'source_uri' => $source_uri,
             'is_comment' => $is_comment,
             'is_enable' => $is_enable,
+            'summary' => Str::limit(strip_tags($content), 255),
             'content' => $content,
         ]);
 
@@ -110,6 +112,7 @@ class ArticleController extends AbstractController
                 'source_uri' => $source_uri,
                 'is_comment' => $is_comment,
                 'is_enable' => $is_enable,
+                'summary' => Str::limit(strip_tags($content), 255),
                 'content' => $content,
             ]);
 

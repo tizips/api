@@ -19,8 +19,8 @@ class CreateLinkTable extends Migration
             $table->string('email', 120)->default('')->comment('邮箱');
             $table->string('logo', 120)->default('')->comment('Logo');
             $table->string('summary', 120)->default('')->comment('简介');
-            $table->unsignedTinyInteger('no')->default(50)->comment('位置：0=所有；1=页底；2=其他');
-            $table->unsignedTinyInteger('position')->default(50)->comment('序号');
+            $table->unsignedTinyInteger('no')->default(50)->comment('序号');
+            $table->unsignedTinyInteger('position')->default(0)->comment('位置：1=页底；2=其他');
             $table->unsignedTinyInteger('is_enable')->default(0)->comment('启用：0=否；1=是');
             $table->timestamps();
             $table->softDeletes();
