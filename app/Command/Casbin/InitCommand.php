@@ -13,9 +13,6 @@ use Hyperf\Command\Command as HyperfCommand;
 use Hyperf\Command\Annotation\Command;
 use Psr\Container\ContainerInterface;
 
-/**
- * @Command
- */
 #[Command]
 class InitCommand extends HyperfCommand
 {
@@ -102,7 +99,7 @@ class InitCommand extends HyperfCommand
                 'name' => '创建',
                 'slug' => 'auth.permission.create',
                 'method' => Method::POST,
-                'path' => '/permission',
+                'path' => '/admin/permission',
                 'created_at' => $now->toDateTimeString(),
                 'updated_at' => $now->toDateTimeString(),
             ],
@@ -113,7 +110,7 @@ class InitCommand extends HyperfCommand
                 'name' => '修改',
                 'slug' => 'auth.permission.update',
                 'method' => Method::PUT,
-                'path' => '/permissions/{id}',
+                'path' => '/admin/permissions/{id}',
                 'created_at' => $now->toDateTimeString(),
                 'updated_at' => $now->toDateTimeString(),
             ],
@@ -124,7 +121,7 @@ class InitCommand extends HyperfCommand
                 'name' => '删除',
                 'slug' => 'auth.permission.delete',
                 'method' => Method::DELETE,
-                'path' => '/permissions/{id}',
+                'path' => '/admin/permissions/{id}',
                 'created_at' => $now->toDateTimeString(),
                 'updated_at' => $now->toDateTimeString(),
             ],
@@ -133,9 +130,9 @@ class InitCommand extends HyperfCommand
                 'parent_i1' => 1,
                 'parent_i2' => 2,
                 'name' => '列表',
-                'slug' => 'auth.permission.create',
+                'slug' => 'auth.permission.tree',
                 'method' => Method::GET,
-                'path' => '/permissions',
+                'path' => '/admin/permissions',
                 'created_at' => $now->toDateTimeString(),
                 'updated_at' => $now->toDateTimeString(),
             ],

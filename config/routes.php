@@ -4,12 +4,7 @@ declare(strict_types=1);
 
 use Hyperf\HttpServer\Router\Router;
 
-
 Router::addGroup('/open', function () {
-
-    Router::addGroup('/site', function () {
-        Router::get('/config', [App\Controller\Open\SiteController::class, 'toConfig']);
-    });
 
     Router::addGroup('/categories', function () {
         Router::get('', [App\Controller\Open\CategoryController::class, 'toTree']);
@@ -23,6 +18,10 @@ Router::addGroup('/open', function () {
 
     Router::addGroup('/links', function () {
         Router::get('', [App\Controller\Open\LinkController::class, 'toList']);
+    });
+
+    Router::addGroup('/system', function () {
+        Router::get('/site', [App\Controller\Open\SystemController::class, 'toSite']);
     });
 });
 
@@ -109,6 +108,11 @@ Router::addGroup('/admin', function () {
 
             Router::put('/enable', [App\Controller\Admin\LinkController::class, 'doEnable']);
             Router::post('', [App\Controller\Admin\LinkController::class, 'doCreate']);
+        });
+
+        Router::addGroup('/system', function () {
+            Router::get('', [App\Controller\Admin\SystemController::class, 'toList']);
+            Router::put('', [App\Controller\Admin\SystemController::class, 'doUpdate']);
         });
 
     }, [

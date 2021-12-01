@@ -14,6 +14,7 @@
   "require": {
     "php": ">=8.0",
     "donjan-deng/hyperf-casbin": "^3.18",
+    "hyperf-ext/enum": "^2.2",
     "hyperf/cache": "^2.2",
     "hyperf/command": "^2.2",
     "hyperf/config": "^2.2",
