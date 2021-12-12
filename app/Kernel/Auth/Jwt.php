@@ -119,8 +119,6 @@ class Jwt
         }
 
         ApiException::break('令牌刷新失败！');
-
-        return null;
     }
 
     public function refresh_can($payload): bool

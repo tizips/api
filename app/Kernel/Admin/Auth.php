@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Kernel\Auth;
+namespace App\Kernel\Admin;
 
 use App\Model\Admin;
 use Hyperf\Utils\Context;
@@ -16,7 +16,7 @@ class Auth
     public static function id(): int
     {
         $payload = self::jwt();
-        return $payload ? $payload['sub'] : 0;
+        return $payload ? intval($payload['sub']) : 0;
     }
 
     /**

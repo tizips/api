@@ -7,7 +7,7 @@ namespace App\Controller\Admin;
 use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
-use App\Kernel\Auth\Auth;
+use App\Kernel\Admin\Auth;
 use App\Model\Article;
 use App\Model\Category;
 use App\Validator\Admin\Article\CreateValidator;

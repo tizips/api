@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Exception\Handler;
 
-use App\Kernel\Auth\Auth;
+use App\Kernel\Admin\Auth;
 use Hyperf\Contract\StdoutLoggerInterface;
 use Hyperf\ExceptionHandler\ExceptionHandler;
 use Hyperf\HttpMessage\Stream\SwooleStream;

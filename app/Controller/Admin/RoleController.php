@@ -7,7 +7,7 @@ namespace App\Controller\Admin;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
 use App\Helper\Casbin;
-use App\Kernel\Auth\Auth;
+use App\Kernel\Admin\Auth;
 use App\Model\Permission;
 use App\Model\Role;
 use App\Model\RoleBindPermission;

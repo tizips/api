@@ -6,7 +6,7 @@ namespace App\Middleware\Auth;
 
 use App\Constants\EnableConstants;
 use App\Exception\ApiException;
-use App\Kernel\Auth\Auth;
+use App\Kernel\Admin\Auth;
 use App\Kernel\Auth\Jwt;
 use App\Model\Admin;
 use Hyperf\Di\Annotation\Inject;
@@ -14,8 +14,8 @@ use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\SimpleCache\CacheInterface;
 use Psr\SimpleCache\InvalidArgumentException;

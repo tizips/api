@@ -8,7 +8,7 @@ use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
 use App\Helper\Casbin;
-use App\Kernel\Auth\Auth;
+use App\Kernel\Admin\Auth;
 use App\Model\Admin;
 use App\Model\AdminBindRole;
 use App\Model\Role;

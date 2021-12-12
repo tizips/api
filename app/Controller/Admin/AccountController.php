@@ -7,8 +7,7 @@ namespace App\Controller\Admin;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
 use App\Helper\Casbin;
-use App\Kernel\Auth\Auth;
-use App\Model\Admin;
+use App\Kernel\Admin\Auth;
 use App\Model\Permission;
 use App\Service\Admin\PermissionService;
 use Donjan\Casbin\Enforcer;
@@ -23,13 +22,15 @@ class AccountController extends AbstractController
 
     public function toAccount(): ResponseInterface
     {
+        $auth = Auth::user();
+
         $data = [
-            'username' => Auth::user()->username,
-            'nickname' => Auth::user()->nickname,
-            'avatar' => Auth::user()->avatar,
-            'email' => Auth::user()->email,
-            'signature' => Auth::user()->signature,
-            'mobile' => Auth::user()->mobile,
+            'username' => $auth->username,
+            'nickname' => $auth->nickname,
+            'avatar' => $auth->avatar,
+            'email' => $auth->email,
+            'signature' => $auth->signature,
+            'mobile' => $auth->mobile,
         ];
 
         return $this->response->apiSuccess($data);
@@ -77,7 +78,6 @@ class AccountController extends AbstractController
 
         if (Enforcer::hasRoleForUser(Casbin::user(Auth::id()), Casbin::ROOT)) {
             $permissions = Permission::query()->whereNotNull('method')->whereNotNull('path')->get();
-
         } else {
             $permissions = $this->PermissionService->toSelf(Auth::id());
         }

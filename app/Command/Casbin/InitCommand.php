@@ -33,6 +33,13 @@ class InitCommand extends HyperfCommand
 
     public function handle()
     {
+        $exist = Role::query()->exists();
+
+        if ($exist) {
+            $this->error('角色信息已存在！无法重复生成！');
+            return;
+        }
+
         $ok = Role::query()->insert($this->roles());
 
         if (! $ok) {
@@ -53,6 +60,7 @@ class InitCommand extends HyperfCommand
     private function roles(): array
     {
         $now = Carbon::now();
+
         return [
             [
                 'id' => 1,
@@ -133,6 +141,127 @@ class InitCommand extends HyperfCommand
                 'slug' => 'auth.permission.tree',
                 'method' => Method::GET,
                 'path' => '/admin/permissions',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 7,
+                'parent_i1' => 1,
+                'parent_i2' => null,
+                'name' => '角色管理',
+                'slug' => 'auth.role',
+                'method' => null,
+                'path' => null,
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 8,
+                'parent_i1' => 1,
+                'parent_i2' => 7,
+                'name' => '创建',
+                'slug' => 'auth.role.create',
+                'method' => Method::POST,
+                'path' => '/admin/role',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 9,
+                'parent_i1' => 1,
+                'parent_i2' => 7,
+                'name' => '修改',
+                'slug' => 'auth.role.update',
+                'method' => Method::PUT,
+                'path' => '/admin/roles/{id}',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 10,
+                'parent_i1' => 1,
+                'parent_i2' => 7,
+                'name' => '删除',
+                'slug' => 'auth.role.delete',
+                'method' => Method::DELETE,
+                'path' => '/admin/roles/{id}',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 11,
+                'parent_i1' => 1,
+                'parent_i2' => 7,
+                'name' => '列表',
+                'slug' => 'auth.role.paginate',
+                'method' => Method::GET,
+                'path' => '/admin/roles',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 12,
+                'parent_i1' => 1,
+                'parent_i2' => null,
+                'name' => '账号管理',
+                'slug' => 'auth.admin',
+                'method' => null,
+                'path' => null,
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 13,
+                'parent_i1' => 1,
+                'parent_i2' => 12,
+                'name' => '创建',
+                'slug' => 'auth.admin.create',
+                'method' => Method::POST,
+                'path' => '/admin/admin',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 14,
+                'parent_i1' => 1,
+                'parent_i2' => 12,
+                'name' => '修改',
+                'slug' => 'auth.admin.update',
+                'method' => Method::PUT,
+                'path' => '/admin/admins/{id}',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 15,
+                'parent_i1' => 1,
+                'parent_i2' => 12,
+                'name' => '删除',
+                'slug' => 'auth.admin.delete',
+                'method' => Method::DELETE,
+                'path' => '/admin/admins/{id}',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 16,
+                'parent_i1' => 1,
+                'parent_i2' => 12,
+                'name' => '启禁',
+                'slug' => 'auth.admin.delete',
+                'method' => Method::PUT,
+                'path' => '/admin/admin/enable',
+                'created_at' => $now->toDateTimeString(),
+                'updated_at' => $now->toDateTimeString(),
+            ],
+            [
+                'id' => 17,
+                'parent_i1' => 1,
+                'parent_i2' => 12,
+                'name' => '列表',
+                'slug' => 'auth.admin.paginate',
+                'method' => Method::GET,
+                'path' => '/admin/admins',
                 'created_at' => $now->toDateTimeString(),
                 'updated_at' => $now->toDateTimeString(),
             ],

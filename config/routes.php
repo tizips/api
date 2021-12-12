@@ -35,6 +35,7 @@ Router::addGroup('/admin', function () {
 
         Router::get('/apis', [App\Controller\Admin\HelperController::class, 'toApis']);
         Router::post('/upload', [App\Controller\Admin\HelperController::class, 'doUpload']);
+
         Router::addGroup('/account', function () {
             Router::get('', [App\Controller\Admin\AccountController::class, 'toAccount']);
             Router::get('/permission', [App\Controller\Admin\AccountController::class, 'toPermission']);

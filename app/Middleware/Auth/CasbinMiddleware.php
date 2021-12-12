@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace App\Middleware\Auth;
 
 use App\Helper\Casbin;
-use App\Kernel\Auth\Auth;
+use App\Kernel\Admin\Auth;
 use Donjan\Casbin\Enforcer;
 use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\HttpServer\Contract\ResponseInterface as HttpResponse;
 use Hyperf\HttpServer\Router\Dispatched;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 
 /**

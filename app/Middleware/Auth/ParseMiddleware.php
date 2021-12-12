@@ -85,8 +85,6 @@ class ParseMiddleware implements MiddlewareInterface
 
         if ($this->request->hasHeader('Authorization')) {
             $token = $this->request->getHeaderLine('Authorization');
-        } else if ($this->request->hasCookie('Authorization')) {
-            $token = $this->request->cookie('Authorization');
         } elseif ($this->request->has('Authorization')) {
             $token = $this->request->input('Authorization');
         }
