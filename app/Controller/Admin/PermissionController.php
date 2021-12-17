@@ -13,8 +13,8 @@ use App\Model\Role;
 use App\Model\RoleBindPermission;
 use App\Service\Admin\HelperService;
 use App\Service\Admin\PermissionService;
-use App\Validator\Admin\Permission\CreateValidator;
-use App\Validator\Admin\Permission\UpdateValidator;
+use App\Validator\Admin\Permission\doCreateValidator;
+use App\Validator\Admin\Permission\doUpdateValidator;
 use Donjan\Casbin\Enforcer;
 use Hyperf\Database\Query\JoinClause;
 use Hyperf\Di\Annotation\Inject;
@@ -37,7 +37,7 @@ class PermissionController extends AbstractController
      */
     public function doCreate(): ResponseInterface
     {
-        CreateValidator::make();
+        doCreateValidator::make();
 
         $parent_id = (int) $this->request->input('parent');
         $name = (string) $this->request->input('name');
@@ -99,7 +99,7 @@ class PermissionController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $id = (int) $this->request->route('id');
         $parent_id = (int) $this->request->input('parent');

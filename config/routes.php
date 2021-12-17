@@ -11,9 +11,14 @@ Router::addGroup('/open', function () {
         Router::get('/{uri}', [App\Controller\Open\CategoryController::class, 'toInformation']);
     });
 
-    Router::addGroup('/articles', function () {
-        Router::get('', [App\Controller\Open\ArticleController::class, 'toPaginate']);
-        Router::get('/{id}', [App\Controller\Open\ArticleController::class, 'toInformation']);
+    Router::addGroup('/article', function () {
+
+        Router::addGroup('s', function () {
+            Router::get('', [App\Controller\Open\ArticleController::class, 'toPaginate']);
+            Router::get('/{id}', [App\Controller\Open\ArticleController::class, 'toInformation']);
+        });
+
+        Router::get('/search', [App\Controller\Open\ArticleController::class, 'toSearch']);
     });
 
     Router::addGroup('/links', function () {
@@ -23,7 +28,11 @@ Router::addGroup('/open', function () {
     Router::addGroup('/system', function () {
         Router::get('/site', [App\Controller\Open\SystemController::class, 'toSite']);
     });
-});
+}, [
+    'middleware' => [
+        App\Middleware\Util\CorsMiddleware::class,
+    ],
+]);
 
 Router::addGroup('/admin', function () {
 

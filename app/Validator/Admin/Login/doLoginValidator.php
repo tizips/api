@@ -7,7 +7,7 @@ namespace App\Validator\Admin\Login;
 use App\Helper\Pattern;
 use App\Validator\Validator;
 
-class LoginValidator extends Validator
+class doLoginValidator extends Validator
 {
     protected function rule(): array
     {

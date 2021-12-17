@@ -7,7 +7,7 @@ namespace App\Controller\Open;
 use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
 use App\Model\Link;
-use App\Validator\Open\Link\ListValidator;
+use App\Validator\Open\Link\toListValidator;
 use Hyperf\Utils\Collection;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -22,7 +22,7 @@ class LinkController extends AbstractController
      */
     public function toList(): ResponseInterface
     {
-        ListValidator::make();
+        toListValidator::make();
 
         $data = [];
 

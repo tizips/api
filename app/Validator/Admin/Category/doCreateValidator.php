@@ -10,7 +10,7 @@ use App\Model\Category;
 use App\Validator\Validator;
 use Hyperf\Validation\Rule;
 
-class CreateValidator extends Validator
+class doCreateValidator extends Validator
 {
     protected function rule(): array
     {

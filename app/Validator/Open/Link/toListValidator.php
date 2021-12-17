@@ -6,7 +6,7 @@ namespace App\Validator\Open\Link;
 
 use App\Validator\Validator;
 
-class ListValidator extends Validator
+class toListValidator extends Validator
 {
     protected function rule(): array
     {

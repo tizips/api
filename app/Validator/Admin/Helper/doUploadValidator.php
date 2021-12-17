@@ -7,7 +7,7 @@ namespace App\Validator\Admin\Helper;
 use App\Helper\Pattern;
 use App\Validator\Validator;
 
-class UploadValidator extends Validator
+class doUploadValidator extends Validator
 {
     protected function rule(): array
     {

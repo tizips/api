@@ -10,7 +10,7 @@ use App\Exception\ApiException;
 use App\Helper\Admin;
 use App\Model\System;
 use App\Service\Admin\SystemService;
-use App\Validator\Admin\System\UpdateValidator;
+use App\Validator\Admin\System\doUpdateValidator;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Collection;
@@ -73,7 +73,7 @@ class SystemController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $type = (string) $this->request->input('type');
 

@@ -12,9 +12,9 @@ use App\Kernel\Admin\Auth;
 use App\Model\Admin;
 use App\Model\AdminBindRole;
 use App\Model\Role;
-use App\Validator\Admin\Admin\CreateValidator;
-use App\Validator\Admin\Admin\UpdateValidator;
-use App\Validator\Unit\EnableValidator;
+use App\Validator\Admin\Admin\doCreateValidator;
+use App\Validator\Admin\Admin\doUpdateValidator;
+use App\Validator\Unit\doEnableValidator;
 use Donjan\Casbin\Enforcer;
 use Exception;
 use Hyperf\Database\Query\JoinClause;
@@ -34,7 +34,7 @@ class AdminController extends AbstractController
      */
     public function doCreate(): ResponseInterface
     {
-        CreateValidator::make();
+        doCreateValidator::make();
 
         $username = (string) $this->request->input('username');
         $nickname = (string) $this->request->input('nickname');
@@ -109,7 +109,7 @@ class AdminController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $id = (int) $this->request->route('id');
         $nickname = (string) $this->request->input('nickname');
@@ -251,7 +251,7 @@ class AdminController extends AbstractController
      */
     public function doEnable(): ResponseInterface
     {
-        EnableValidator::make();
+        doEnableValidator::make();
 
         $id = (int) $this->request->input('id');
         $enable = (int) $this->request->input('enable');

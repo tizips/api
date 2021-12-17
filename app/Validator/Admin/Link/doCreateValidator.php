@@ -9,7 +9,7 @@ use App\Model\Link;
 use App\Validator\Validator;
 use Hyperf\Validation\Rule;
 
-class UpdateValidator extends Validator
+class doCreateValidator extends Validator
 {
     protected function rule(): array
     {

@@ -33,6 +33,7 @@
     "hyperf/redis": "^2.2",
     "hyperf/snowflake": "^2.2",
     "hyperf/validation": "^2.2",
+    "meilisearch/meilisearch-php": "^0.20.0",
     "overtrue/flysystem-qiniu": "^2.0"
   },
   "require-dev": {

@@ -8,9 +8,9 @@ use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
 use App\Model\Category;
-use App\Validator\Admin\Category\CreateValidator;
-use App\Validator\Admin\Category\UpdateValidator;
-use App\Validator\Unit\EnableValidator;
+use App\Validator\Admin\Category\doCreateValidator;
+use App\Validator\Admin\Category\doUpdateValidator;
+use App\Validator\Unit\doEnableValidator;
 use Hyperf\Utils\Collection;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -25,7 +25,7 @@ class CategoryController extends AbstractController
      */
     public function doCreate(): ResponseInterface
     {
-        CreateValidator::make();
+        doCreateValidator::make();
 
         $parent_id = (int) $this->request->input('parent');
         $name = (string) $this->request->input('name');
@@ -79,7 +79,7 @@ class CategoryController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $id = (int) $this->request->route('id');
         $parent_id = (int) $this->request->input('parent');
@@ -308,7 +308,7 @@ class CategoryController extends AbstractController
      */
     public function doEnable(): ResponseInterface
     {
-        EnableValidator::make();
+        doEnableValidator::make();
 
         $id = (int) $this->request->input('id');
         $enable = (int) $this->request->input('enable');

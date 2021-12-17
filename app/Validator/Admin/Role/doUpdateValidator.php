@@ -6,7 +6,7 @@ namespace App\Validator\Admin\Role;
 
 use App\Validator\Validator;
 
-class CreateValidator extends Validator
+class doUpdateValidator extends Validator
 {
     protected function rule(): array
     {

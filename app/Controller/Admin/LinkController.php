@@ -8,9 +8,9 @@ use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
 use App\Model\Link;
-use App\Validator\Admin\Link\CreateValidator;
-use App\Validator\Admin\Link\UpdateValidator;
-use App\Validator\Unit\EnableValidator;
+use App\Validator\Admin\Link\doCreateValidator;
+use App\Validator\Admin\Link\doUpdateValidator;
+use App\Validator\Unit\doEnableValidator;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -24,7 +24,7 @@ class LinkController extends AbstractController
      */
     public function doCreate(): ResponseInterface
     {
-        CreateValidator::make();
+        doCreateValidator::make();
 
         $name = (string) $this->request->input('name');
         $uri = (string) $this->request->input('uri');
@@ -61,7 +61,7 @@ class LinkController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $id = (int) $this->request->route('id');
         $name = (string) $this->request->input('name');
@@ -103,7 +103,7 @@ class LinkController extends AbstractController
      */
     public function doEnable(): ResponseInterface
     {
-        EnableValidator::make();
+        doEnableValidator::make();
 
         $id = (int) $this->request->input('id');
         $enable = (int) $this->request->input('enable');

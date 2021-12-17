@@ -6,7 +6,7 @@ namespace App\Controller\Admin;
 
 use App\Controller\AbstractController;
 use App\Service\Admin\HelperService;
-use App\Validator\Admin\Helper\UploadValidator;
+use App\Validator\Admin\Helper\doUploadValidator;
 use Hyperf\Di\Annotation\Inject;
 use Hyperf\Snowflake\IdGeneratorInterface;
 use League\Flysystem\Filesystem;
@@ -50,7 +50,7 @@ class HelperController extends AbstractController
      */
     public function doUpload(): ResponseInterface
     {
-        UploadValidator::make(true);
+        doUploadValidator::make(true);
 
         $file = $this->request->file('file');
         $dir = (string) $this->request->input('dir', '');

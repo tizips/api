@@ -10,9 +10,12 @@ use App\Exception\ApiException;
 use App\Kernel\Admin\Auth;
 use App\Model\Article;
 use App\Model\Category;
-use App\Validator\Admin\Article\CreateValidator;
-use App\Validator\Admin\Article\UpdateValidator;
-use App\Validator\Unit\EnableValidator;
+use App\Service\Utils\MeilisearchService;
+use App\Validator\Admin\Article\doCreateValidator;
+use App\Validator\Admin\Article\doUpdateValidator;
+use App\Validator\Unit\doEnableValidator;
+use Exception;
+use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -20,6 +23,9 @@ use Psr\Http\Message\ResponseInterface;
 
 class ArticleController extends AbstractController
 {
+    #[Inject]
+    private MeilisearchService $MeilisearchService;
+
     /**
      * @return ResponseInterface
      * @throws ContainerExceptionInterface
@@ -27,7 +33,7 @@ class ArticleController extends AbstractController
      */
     public function doCreate(): ResponseInterface
     {
-        CreateValidator::make();
+        doCreateValidator::make();
 
         $category_id = (int) $this->request->input('category');
         $name = (string) $this->request->input('name');
@@ -47,6 +53,7 @@ class ArticleController extends AbstractController
         elseif ($category->is_page === Category::IS_PAGE_YES) ApiException::break('非列表栏目，无法添加！');
         elseif ($category->child) ApiException::break('栏目非终极栏目，无法添加！');
 
+        /** @var Article $article */
         $article = Article::query()->create([
             'category_id' => $category->id,
             'name' => $name,
@@ -65,6 +72,8 @@ class ArticleController extends AbstractController
 
         if (! $article) ApiException::break('文章添加失败！');
 
+        $this->MeilisearchService->save($article);
+
         return $this->response->apiSuccess();
     }
 
@@ -75,7 +84,7 @@ class ArticleController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $id = (int) $this->request->route('id');
         $category_id = (int) $this->request->input('category');
@@ -95,12 +104,12 @@ class ArticleController extends AbstractController
 
         /** @var Category $category */
         $category = Category::query()->where('id', $category_id)->first();
+
         if (! $category) ApiException::break('栏目不存在！');
         elseif ($category->is_page === Category::IS_PAGE_YES) ApiException::break('非列表栏目，无法修改！');
         elseif ($category->child) ApiException::break('栏目非终极栏目，无法修改！');
 
-        $affected = Article::query()
-            ->where('id', $id)
+        $affected = $article
             ->update([
                 'category_id' => $category->id,
                 'name' => $name,
@@ -118,9 +127,18 @@ class ArticleController extends AbstractController
 
         if ($affected <= 0) ApiException::break('文章修改失败！');
 
+        /** @var Article $article */
+        $article = $article->refresh();
+
+        $this->MeilisearchService->save($article);
+
         return $this->response->apiSuccess();
     }
 
+    /**
+     * @return ResponseInterface
+     * @throws Exception
+     */
     public function doDelete(): ResponseInterface
     {
         $id = $this->request->route('id');
@@ -129,8 +147,10 @@ class ArticleController extends AbstractController
         $article = Article::query()->where('id', $id)->first();
         if (! $article) ApiException::break('文章不存在！');
 
-        $affected = $article::query()->where('id', $id)->delete();
+        $affected = $article->delete();
         if ($affected <= 0) ApiException::break('文章删除失败！');
+
+        $this->MeilisearchService->delete($id);
 
         return $this->response->apiSuccess();
     }
@@ -142,7 +162,7 @@ class ArticleController extends AbstractController
      */
     public function doEnable(): ResponseInterface
     {
-        EnableValidator::make();
+        doEnableValidator::make();
 
         $id = (int) $this->request->input('id');
         $enable = (int) $this->request->input('enable');
@@ -150,8 +170,13 @@ class ArticleController extends AbstractController
         $article = Article::query()->where('id', $id)->first();
         if (! $article) ApiException::break('文章不存在！');
 
-        $affected = Article::query()->where('id', $id)->update(['is_enable' => $enable]);
+        $affected = $article->update(['is_enable' => $enable]);
         if ($affected <= 0) ApiException::break(sprintf('文章%s失败！', $enable == EnableConstants::IS_ENABLE_YES ? '启用' : '禁用'));
+
+        /** @var Article $article */
+        $article = $article->refresh();
+
+        $this->MeilisearchService->save($article);
 
         return $this->response->apiSuccess();
     }

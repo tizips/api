@@ -12,7 +12,7 @@ use App\Validator\Validator;
 use Hyperf\Validation\Rule;
 use HyperfExt\Enum\Rules\EnumValue;
 
-class UpdateValidator extends Validator
+class doUpdateValidator extends Validator
 {
     protected function rule(): array
     {

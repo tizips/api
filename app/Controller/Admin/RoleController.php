@@ -11,8 +11,8 @@ use App\Kernel\Admin\Auth;
 use App\Model\Permission;
 use App\Model\Role;
 use App\Model\RoleBindPermission;
-use App\Validator\Admin\Role\CreateValidator;
-use App\Validator\Admin\Role\UpdateValidator;
+use App\Validator\Admin\Role\doCreateValidator;
+use App\Validator\Admin\Role\doUpdateValidator;
 use Donjan\Casbin\Enforcer;
 use Hyperf\Database\Model\Builder;
 use Hyperf\DbConnection\Db;
@@ -31,7 +31,7 @@ class RoleController extends AbstractController
      */
     public function doCreate(): ResponseInterface
     {
-        CreateValidator::make();
+        doCreateValidator::make();
 
         $name = (string) $this->request->input('name');
         $summary = (string) $this->request->input('summary');
@@ -99,7 +99,7 @@ class RoleController extends AbstractController
      */
     public function doUpdate(): ResponseInterface
     {
-        UpdateValidator::make();
+        doUpdateValidator::make();
 
         $id = (int) $this->request->route('id');
         $name = (string) $this->request->input('name');

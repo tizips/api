@@ -7,6 +7,7 @@ namespace App\Model;
 use Carbon\Carbon;
 use Hyperf\Database\Model\Relations\HasOne;
 use Hyperf\Database\Model\SoftDeletes;
+use Hyperf\ModelCache\Cacheable;
 
 /**
  * @property int      $id
@@ -32,6 +33,7 @@ use Hyperf\Database\Model\SoftDeletes;
 class Article extends Model
 {
     use SoftDeletes;
+    use Cacheable;
 
     const TABLE = 'article';
 

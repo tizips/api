@@ -9,7 +9,7 @@ use App\Controller\AbstractController;
 use App\Exception\ApiException;
 use App\Kernel\Auth\Jwt;
 use App\Model\Admin;
-use App\Validator\Admin\Login\LoginValidator;
+use App\Validator\Admin\Login\doLoginValidator;
 use Hyperf\Di\Annotation\Inject;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -26,7 +26,7 @@ class LoginController extends AbstractController
      */
     public function doLogin(): ResponseInterface
     {
-        LoginValidator::make();
+        doLoginValidator::make();
 
         $username = (string) $this->request->input('username');
         $password = (string) $this->request->input('password');

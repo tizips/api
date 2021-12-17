@@ -8,7 +8,7 @@ use App\Constants\EnableConstants;
 use App\Validator\Validator;
 use Hyperf\Validation\Rule;
 
-class EnableValidator extends Validator
+class doEnableValidator extends Validator
 {
     protected function rule(): array
     {
