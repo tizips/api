@@ -20,6 +20,7 @@
     "hyperf/config": "^2.2",
     "hyperf/database": "^2.2",
     "hyperf/db-connection": "^2.2",
+    "hyperf/devtool": "^2.2",
     "hyperf/event": "^2.2",
     "hyperf/filesystem": "^2.2",
     "hyperf/framework": "~2.2",
@@ -38,7 +39,6 @@
   },
   "require-dev": {
     "friendsofphp/php-cs-fixer": "^3.0",
-    "hyperf/devtool": "^2.2",
     "hyperf/ide-helper": "^2.2",
     "hyperf/testing": "^2.2",
     "hyperf/watcher": "v2.2.6.1",
