@@ -10,12 +10,10 @@ use App\Exception\ApiException;
 use App\Kernel\Admin\Auth;
 use App\Model\Article;
 use App\Model\Category;
-use App\Service\Utils\MeilisearchService;
 use App\Validator\Admin\Article\doCreateValidator;
 use App\Validator\Admin\Article\doUpdateValidator;
 use App\Validator\Unit\doEnableValidator;
 use Exception;
-use Hyperf\Di\Annotation\Inject;
 use Hyperf\Utils\Str;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
@@ -23,9 +21,6 @@ use Psr\Http\Message\ResponseInterface;
 
 class ArticleController extends AbstractController
 {
-    #[Inject]
-    private MeilisearchService $MeilisearchService;
-
     /**
      * @return ResponseInterface
      * @throws ContainerExceptionInterface
@@ -71,8 +66,6 @@ class ArticleController extends AbstractController
         ]);
 
         if (! $article) ApiException::break('文章添加失败！');
-
-        $this->MeilisearchService->save($article);
 
         return $this->response->apiSuccess();
     }
@@ -127,11 +120,6 @@ class ArticleController extends AbstractController
 
         if ($affected <= 0) ApiException::break('文章修改失败！');
 
-        /** @var Article $article */
-        $article = $article->refresh();
-
-        $this->MeilisearchService->save($article);
-
         return $this->response->apiSuccess();
     }
 
@@ -149,8 +137,6 @@ class ArticleController extends AbstractController
 
         $affected = $article->delete();
         if ($affected <= 0) ApiException::break('文章删除失败！');
-
-        $this->MeilisearchService->delete($id);
 
         return $this->response->apiSuccess();
     }
@@ -172,11 +158,6 @@ class ArticleController extends AbstractController
 
         $affected = $article->update(['is_enable' => $enable]);
         if ($affected <= 0) ApiException::break(sprintf('文章%s失败！', $enable == EnableConstants::IS_ENABLE_YES ? '启用' : '禁用'));
-
-        /** @var Article $article */
-        $article = $article->refresh();
-
-        $this->MeilisearchService->save($article);
 
         return $this->response->apiSuccess();
     }

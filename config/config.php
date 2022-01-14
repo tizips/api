@@ -8,9 +8,6 @@ use Psr\Log\LogLevel;
 return [
     'app_name' => env('APP_NAME', 'skeleton'),
     'app_env' => env('APP_ENV', 'dev'),
-    'app_close' => env('APP_CLOSE', false),
-    'filing_icp' => env('FILING_ICP', ''),
-    'filing_police' => env('FILING_POLICE', ''),
     'api' => env('API', 'localhost'),
     'cors' => env('CORS', false),
     'scan_cacheable' => env('SCAN_CACHEABLE', false),

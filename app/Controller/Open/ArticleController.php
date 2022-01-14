@@ -7,22 +7,15 @@ namespace App\Controller\Open;
 use App\Constants\EnableConstants;
 use App\Controller\AbstractController;
 use App\Exception\ApiException;
-use App\Model\Admin;
 use App\Model\Article;
 use App\Model\Category;
-use App\Service\Utils\MeilisearchService;
 use App\Validator\Open\Article\toSearchValidator;
-use Hyperf\Di\Annotation\Inject;
-use Hyperf\Utils\Collection;
 use Psr\Container\ContainerExceptionInterface;
 use Psr\Container\NotFoundExceptionInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class ArticleController extends AbstractController
 {
-    #[Inject]
-    private MeilisearchService $MeilisearchService;
-
     public function toPaginate(): ResponseInterface
     {
         $category_uri = (string) $this->request->input('uri');
@@ -115,56 +108,28 @@ class ArticleController extends AbstractController
         toSearchValidator::make();
 
         $keyword = (string) $this->request->input('keyword');
-        $page = (int) $this->request->input('page', 1);
         $size = (int) $this->request->input('size', 10);
 
-        $page = max($page, 1);
+        $articles = Article::search($keyword)
+            ->with(['category', 'author'])
+            ->paginate($size);
 
+        $data = [];
 
-        $response = $this->MeilisearchService->search($keyword, $page, $size);
-
-        $data = [
-            'size' => $size,
-            'page' => $page,
-            'total' => $response->getNbHits(),
-            'data' => [],
-        ];
-
-        if ($response->getHitsCount() > 0) {
-            foreach ($response->getHits() as $item) {
-                $data['data'][] = [
-                    'id' => (int) $item['id'],
-                    'name' => $item['name'],
-                    'category' => (int) $item['category_id'],
-                    'author' => (int) $item['admin_id'],
-                    'summary' => $item['summary'],
-                    'created_at' => $item['created_at'],
+        if ($articles->isNotEmpty()) {
+            foreach ($articles->items() as $item) {
+                /** @var Article $item */
+                $data[] = [
+                    'id' => $item->id,
+                    'name' => $item->name,
+                    'category' => $item->category->name,
+                    'author' => $item->author->nickname,
+                    'summary' => $item->summary,
+                    'created_at' => $item->created_at,
                 ];
-            }
-
-            /** @var Category[]|Collection $categories */
-            $categories = Category::query()->whereIn('id', array_column($data['data'], 'category'))->get();
-
-            if ($categories->isNotEmpty()) {
-                foreach ($data['data'] as $key => $val) {
-                    foreach ($categories as $item) {
-                        if ($val['category'] == $item->id) $data['data'][$key]['category'] = $item->name;
-                    }
-                }
-            }
-
-            /** @var Admin[]|Collection $admins */
-            $admins = Admin::query()->whereIn('id', array_column($data['data'], 'author'))->get();
-
-            if ($admins->isNotEmpty()) {
-                foreach ($data['data'] as $key => $val) {
-                    foreach ($admins as $item) {
-                        if ($val['author'] == $item->id) $data['data'][$key]['author'] = $item->nickname;
-                    }
-                }
             }
         }
 
-        return $this->response->apiSuccess($data);
+        return $this->response->apiPaginate($articles, $data);
     }
 }

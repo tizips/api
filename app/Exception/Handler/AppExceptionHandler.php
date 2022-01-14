@@ -22,7 +22,7 @@ class AppExceptionHandler extends ExceptionHandler
     public function __construct(StdoutLoggerInterface $logger, LoggerFactory $loggerFactory)
     {
         $this->logger = $logger;
-        $this->log = $loggerFactory->get('exception');
+        $this->log = $loggerFactory->get('exception', 'exception');
     }
 
     public function handle(Throwable $throwable, ResponseInterface $response): ResponseInterface

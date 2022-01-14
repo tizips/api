@@ -16,7 +16,7 @@ return [
     'adapter' => [
         'class' => \Donjan\Casbin\Adapters\Mysql\DatabaseAdapter::class,
         'constructor' => [
-            'tableName' => 'casbin_rule'
+            'tableName' => 'casbin'
         ],
     ],
     'log' => [

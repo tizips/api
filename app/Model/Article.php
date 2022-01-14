@@ -4,10 +4,12 @@ declare (strict_types=1);
 
 namespace App\Model;
 
+use App\Constants\EnableConstants;
 use Carbon\Carbon;
 use Hyperf\Database\Model\Relations\HasOne;
 use Hyperf\Database\Model\SoftDeletes;
 use Hyperf\ModelCache\Cacheable;
+use HyperfExt\Scout\Searchable;
 
 /**
  * @property int      $id
@@ -32,6 +34,7 @@ use Hyperf\ModelCache\Cacheable;
  */
 class Article extends Model
 {
+    use Searchable;
     use SoftDeletes;
     use Cacheable;
 
@@ -57,5 +60,56 @@ class Article extends Model
     public function author(): HasOne
     {
         return $this->hasOne(Admin::class, 'id', 'admin_id');
+    }
+
+    public function getScoutSettings(): ?array
+    {
+        return [
+            'analysis' => [
+                'analyzer' => [
+                    'ik_pinyin_analyzer' => [
+                        'type' => 'custom',
+                        'tokenizer' => 'ik_max_word',
+                        'filter' => [
+                            'up_pinyin',
+                        ],
+                    ],
+                ],
+                'filter' => [
+                    'up_pinyin' => [
+                        'type' => 'pinyin',
+                    ],
+                ],
+            ],
+        ];
+    }
+
+    public function getScoutMapping(): array
+    {
+        return [
+            'properties' => [
+                'id' => ['type' => 'integer'],
+                'category_id' => ['type' => 'integer'],
+                'name' => ['type' => 'text'],
+                'picture' => ['type' => 'keyword'],
+                'title' => ['type' => 'text'],
+                'keyword' => ['type' => 'text'],
+                'description' => ['type' => 'text'],
+                'admin_id' => ['type' => 'integer'],
+                'source_name' => ['type' => 'keyword'],
+                'source_uri' => ['type' => 'keyword'],
+                'summary' => ['type' => 'text'],
+                'content' => ['type' => 'text'],
+                'is_comment' => ['type' => 'byte'],
+                'is_enable' => ['type' => 'byte'],
+                'created_at' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss||date_optional_time||epoch_millis'],
+                'updated_at' => ['type' => 'date', 'format' => 'yyyy-MM-dd HH:mm:ss||date_optional_time||epoch_millis'],
+            ],
+        ];
+    }
+
+    public function shouldBeSearchable(): bool
+    {
+        return $this->is_enable == EnableConstants::IS_ENABLE_YES;
     }
 }

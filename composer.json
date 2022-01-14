@@ -15,6 +15,7 @@
     "php": ">=8.0",
     "donjan-deng/hyperf-casbin": "^3.18",
     "hyperf-ext/enum": "^2.2",
+    "hyperf-ext/scout": "^2.2",
     "hyperf/cache": "^2.2",
     "hyperf/command": "^2.2",
     "hyperf/config": "^2.2",
@@ -34,7 +35,6 @@
     "hyperf/redis": "^2.2",
     "hyperf/snowflake": "^2.2",
     "hyperf/validation": "^2.2",
-    "meilisearch/meilisearch-php": "^0.20.0",
     "overtrue/flysystem-qiniu": "^2.0"
   },
   "require-dev": {
@@ -70,7 +70,10 @@
   "prefer-stable": true,
   "config": {
     "optimize-autoloader": true,
-    "sort-packages": true
+    "sort-packages": true,
+    "allow-plugins": {
+      "composer/package-versions-deprecated": true
+    }
   },
   "extra": [],
   "scripts": {

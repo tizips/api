@@ -8,3 +8,18 @@ if (! function_exists('path_base')) {
         return BASE_PATH . $dir;
     }
 }
+
+if (! function_exists('routes')) {
+    function routes()
+    {
+        $path = path_base('/routes');
+
+        $files = scandir($path);
+
+        foreach ($files as $file) {
+            if (Hyperf\Utils\Str::endsWith($file, 'php')) {
+                require_once $path . '/' . $file;
+            }
+        }
+    }
+}
